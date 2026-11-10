@@ -16,7 +16,10 @@
 <body>
 
 <h1>SEGUIMIENTO DEL SUJETO #1</h1>
-
+<div id="panel-vigilancia" style="margin-bottom: 40px; padding: 10px; background: #0a0000; border: 1px solid #330000; font-family: 'Courier New', monospace; font-size: 0.9rem; color: #ff0000;">
+    <p style="margin: 0 0 5px 0;">[ SISTEMA DE VIGILANCIA EN LÍNEA ]</p>
+    <p style="margin: 0; color: #888;">Último acceso detectado: <span id="ultima-hora" style="color: #fff; font-weight: bold;">Conectando...</span></p>
+</div>
 <div class="foto">
   <span class="fecha">07/11/2026 — 17:46</span>
   <img src="1794091591-frisks.jpeg" alt="">
@@ -26,7 +29,7 @@
 <div class="foto">
   <span class="fecha">12/12/12</span>
   <img src="1794093017-nogamenolife.png" alt="">
-  <p>soy solamente un perdedor</p>
+  <p>esta imagen me trae muchos recuerdos</p>
 </div>
 
 <div class="foto">
@@ -167,7 +170,44 @@
   <p>pos segun parece turquesa pero siento que puede ser otro color </p>
 </div>
 
-<div id="fotos"></div>
+<div id="panel-vigilancia" style="margin-top: 50px; border-top: 1px dashed #ff0000; padding-top: 20px; color: #ff0000; font-family: 'Courier New', monospace; font-size: 0.85rem;">
+    <strong>REGISTRO DE VIGILANCIA ACTIVO...</strong>
+    <ul id="lista-visitas" style="list-style: none; padding: 0; color: #888;">
+        <li>Cargando datos del servidor...</li>
+    </ul>
+</div>
 
+<script>
+    // Este es el "read receipt" invisible
+    function avisarApertura() {
+        // 1. Obtenemos la hora actual
+        const ahora = new Date();
+        const hora = ahora.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+        
+        // 2. Obtenemos la IP pública del visitante (usando un servicio gratuito)
+        fetch('https://api.ipify.org?format=json')
+            .then(response => response.json())
+            .then(data => {
+                const ip = data.ip;
+                // 3. Enviamos la alerta a tu ntfy
+                fetch('https://ntfy.sh/merley-mercado-9x7k2', {
+                    method: 'POST',
+                    body: `👁️ ALERTA: Alguien abrió el archivo a las ${hora} (IP: ${ip})`,
+                    headers: {
+                        'Title': 'Seguimiento del Sujeto #1',
+                        'Priority': 'high',
+                        'Tags': 'eyes'
+                    }
+                });
+            })
+            .catch(error => console.log("Error al rastrear:", error));
+    }
+
+    // Ejecutamos la función en cuanto la página cargue
+    window.onload = avisarApertura;
+</script>>
+
+</body>
+</html>
 </body>
 </html>
